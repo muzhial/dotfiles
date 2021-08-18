@@ -1,0 +1,47 @@
+FROM pytorch/pytorch:1.7.0-cuda11.0-cudnn8-devel
+
+RUN apt update \
+    && apt install -y \
+            git cmake curl wget \
+            ninja-build \
+            openssh-server \
+            libgl1-mesa-glx \
+            sudo \
+            zlib1g-dev \
+            libncurses-dev \
+            clang-10 \
+            libclang-10-dev \
+            silversearcher-ag \
+            ctags \
+    && ln -s /usr/bin/clang-10 /usr/bin/clang \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
+
+## neovim
+RUN apt install -y software-properties-common \
+    && add-apt-repository ppa:neovim-ppa/unstable \
+    && apt update \
+    && apt install neovim -y
+
+## ccls
+RUN git clone --depth=1 --recursive https://github.com/MaskRay/ccls $HOME/ccls \
+    && cd $HOME/ccls \
+    && cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10/lib/clang/10.0.0 \
+        -DLLVM_INCLUDE_DIR=/usr/lib/llvm-10/include \
+        -DLLVM_BUILD_INCLUDE_DIR=/usr/include/llvm-10/ \
+    && cmake --build Release \
+    && cd Release && make install \
+    && rm -rf ${work_path}/ccls
+
+## nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt install -y nodejs
+
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf \
+    && bash $HOME/.fzf/install
+
+RUN pip install pynvim neovim
+
+WORKDIR $HOME
+
