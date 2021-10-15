@@ -36,10 +36,10 @@ fi
 if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
     echo "install zsh"
-    apt install -y curl wget
-    apt install -y zsh
-    chsh -s /bin/zsh
-    # theme: bira
+    sudo apt install -y curl wget
+    sudo apt install -y zsh
+    sudo chsh -s /bin/zsh
+    # theme: bira | murilasso | rgm
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
