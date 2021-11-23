@@ -1,0 +1,14 @@
+FROM 43ad3ba83adc
+
+USER root
+
+RUN apt update \
+    && apt install -y \
+        openssh-server \
+        libgl1-mesa-glx \
+        sudo \
+        zlib1g-dev
+
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+USER gddi
+
