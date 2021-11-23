@@ -10,8 +10,11 @@ else
     install_list="$@"
 fi
 
+# common utils
+sudo apt install -y wget curl
+
 if [[ ${install_list} =~ "tmux" ]]; then
-    echo "install tmux"
+    echo "===> install tmux"
     apt update
     apt install -y tmux
 
@@ -26,7 +29,7 @@ fi
 
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
-    echo "install neovim"
+    echo "===> install neovim"
     apt-get install software-properties-common
     add-apt-repository ppa:neovim-ppa/unstable
     apt update
@@ -35,11 +38,15 @@ fi
 
 if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
-    echo "install zsh"
-    apt install -y curl wget
-    apt install -y zsh
-    chsh -s /bin/zsh
-    # theme: bira
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    if command -v zsh > /dev/null 2>&1; then
+        echo "===> exists zsh"
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    else
+        echo "===> install zsh"
+        sudo apt install -y zsh
+        sudo chsh -s /bin/zsh
+        # theme: bira | murilasso | rgm
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    fi
 fi
 
