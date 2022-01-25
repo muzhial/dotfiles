@@ -13,6 +13,8 @@ fi
 # common utils
 sudo apt install -y wget curl
 
+git clone https://github.com/muzhichan/dotfiles.git ~/.dotfiles
+
 if [[ ${install_list} =~ "tmux" ]]; then
     echo "===> install tmux"
     apt update
@@ -22,9 +24,9 @@ if [[ ${install_list} =~ "tmux" ]]; then
     git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     cd $HOME
     ln -s -f .tmux/.tmux.conf
-    cp .tmux/.tmux.conf.local .
+    cp ~/.dotfiles/.tmux.conf.local .
     ## config .tmux.cong.local set mouse mode
-    sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
+    #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
 fi
 
 if [[ ${install_list} =~ "neovim" ]]; then
