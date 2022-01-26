@@ -12,6 +12,7 @@ echo "===> install tmux"
 sudo apt update
 sudo apt install -y tmux
 ## oh my tmux config
+rm -rf ~/.tmux
 git clone https://github.com/gpakosz/.tmux.git ~/.tmux
 cd $HOME
 ln -s -f .tmux/.tmux.conf
