@@ -13,7 +13,9 @@ fi
 # common utils
 sudo apt install -y wget curl
 
-git clone https://github.com/muzhichan/dotfiles.git ~/.dotfiles
+if [ ! -f ~/.dotfiles ]; then
+    git clone https://github.com/muzhichan/dotfiles.git ~/.dotfiles
+fi
 
 if [[ ${install_list} =~ "tmux" ]]; then
     echo "===> install tmux"
