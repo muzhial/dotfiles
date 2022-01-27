@@ -1,6 +1,10 @@
 set -e
+# TODO: git failed, retry specified times
 
 CURRENT_DIR=`pwd`
+GIT_REPO_LIST=(
+    ~/.tmux
+)
 
 default_list=()
 default_len=${#default_list[@]}
@@ -11,18 +15,31 @@ else
 fi
 
 # common utils
-sudo apt install -y wget curl
+echo "\n===> apt install tools"
+sudo apt update
+sudo apt install -y \
+    wget curl tmux
 
-#if [ -d ~/.dotfiles ]; then
-#    rm -rf ~/.dotfiles
-#fi
-#git clone https://github.com/muzhichan/dotfiles.git ~/.dotfiles
+
+echo "\n===> rm thirdparty git repo first"
+for repo in ${GIT_REPO_LIST[@]}; do
+    if [ -d $repo ]; then
+        rm -rf $repo
+    fi
+done
+
+
+if [[ ${install_list} =~ "pip" ]]; then
+    echo "\n===> config pip source"
+    if [ ! -d ~/.pip ]; then
+        mkdir ~/.pip
+    fi
+    cp pip.conf ~/.pip
+fi
+
 
 if [[ ${install_list} =~ "tmux" ]]; then
-    echo "===> install tmux"
-    apt update
-    apt install -y tmux
-
+    echo "\n===> config tmux"
     ## oh my tmux config
     git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     cd $HOME
@@ -31,6 +48,7 @@ if [[ ${install_list} =~ "tmux" ]]; then
     ## config .tmux.cong.local set mouse mode
     #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
 fi
+
 
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
@@ -41,19 +59,23 @@ if [[ ${install_list} =~ "neovim" ]]; then
     apt install neovim -y
 fi
 
+
 if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
     if command -v zsh > /dev/null 2>&1; then
-        echo "===> exists zsh"
+        echo "\n===> exists zsh"
         echo "===> install oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     else
-        echo "===> install zsh"
+        echo "\n===> install zsh"
         sudo apt install -y zsh
         sudo chsh -s /bin/zsh
         # theme: bira | murilasso | rgm
         echo "===> install oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
+
+    cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
 fi
 
