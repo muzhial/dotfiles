@@ -7,6 +7,11 @@ sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
 source ~/.zshrc
 fi
 
+if [ ! -d ~/.pip ]; then
+    mkdir ~/.pip
+fi
+cp pip.conf ~/.pip
+
 if [ $2 -eq  1 ]; then
 echo "===> install tmux"
 sudo apt update
