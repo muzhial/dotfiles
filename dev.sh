@@ -31,9 +31,7 @@ done
 
 if [[ ${install_list} =~ "pip" ]]; then
     echo "\n===> config pip source"
-    if [ ! -d ~/.pip ]; then
-        mkdir ~/.pip
-    fi
+    mkdir -p ~/.pip
     cp pip.conf ~/.pip
 fi
 
