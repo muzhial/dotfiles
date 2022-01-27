@@ -45,12 +45,14 @@ if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
     if command -v zsh > /dev/null 2>&1; then
         echo "===> exists zsh"
+        echo "===> install oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     else
         echo "===> install zsh"
         sudo apt install -y zsh
         sudo chsh -s /bin/zsh
         # theme: bira | murilasso | rgm
+        echo "===> install oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 fi
