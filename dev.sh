@@ -15,13 +15,13 @@ else
 fi
 
 # common utils
-echo "\n===> apt install tools"
+echo -e "\n===> apt install tools"
 sudo apt update
 sudo apt install -y \
     wget curl tmux
 
 
-echo "\n===> rm thirdparty git repo first"
+echo -e "\n===> rm thirdparty git repo first"
 for repo in ${GIT_REPO_LIST[@]}; do
     if [ -d $repo ]; then
         rm -rf $repo
@@ -30,14 +30,14 @@ done
 
 
 if [[ ${install_list} =~ "pip" ]]; then
-    echo "\n===> config pip source"
+    echo -e "\n===> config pip source"
     mkdir -p ~/.pip
     cp pip.conf ~/.pip
 fi
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
-    echo "\n===> config tmux"
+    echo -e "\n===> config tmux"
     ## oh my tmux config
     git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     cd $HOME
@@ -50,7 +50,7 @@ fi
 
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
-    echo "===> install neovim"
+    echo -e "\n===> install neovim"
     apt-get install software-properties-common
     add-apt-repository ppa:neovim-ppa/unstable
     apt update
@@ -61,11 +61,11 @@ fi
 if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
     if command -v zsh > /dev/null 2>&1; then
-        echo "\n===> exists zsh"
+        echo -e "\n===> exists zsh"
         echo "===> install oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     else
-        echo "\n===> install zsh"
+        echo -e "\n===> install zsh"
         sudo apt install -y zsh
         sudo chsh -s /bin/zsh
         # theme: bira | murilasso | rgm
