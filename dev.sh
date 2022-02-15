@@ -73,7 +73,7 @@ if [[ ${install_list} =~ "zsh" ]]; then
     #    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     #fi
 
-    cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
+    #cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
+    #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
 fi
 
