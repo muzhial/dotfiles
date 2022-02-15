@@ -1,9 +1,6 @@
 set -e
 
 if [ $1 -eq 1 ]; then
-    cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
-
     echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
     source ~/.zshrc
 fi
