@@ -19,6 +19,6 @@ if [ $1 -eq 1 ]; then
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
 
     echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
-    source ~/.zshrc
+    # source ~/.zshrc
 fi
 

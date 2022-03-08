@@ -58,7 +58,7 @@ if [[ ${install_list} =~ "neovim" ]]; then
 fi
 
 
-if [[ ${install_list} =~ "zsh" ]]; then
+#if [[ ${install_list} =~ "zsh" ]]; then
     ## zsh
     #if command -v zsh > /dev/null 2>&1; then
     #    echo -e "\n===> exists zsh"
@@ -75,5 +75,5 @@ if [[ ${install_list} =~ "zsh" ]]; then
 
     #cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
     #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
-fi
+#fi
 
