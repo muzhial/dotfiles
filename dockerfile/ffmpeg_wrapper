@@ -11,4 +11,3 @@ RUN apt update \
 
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
 USER gddi
-

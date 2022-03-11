@@ -28,4 +28,3 @@ RUN cd /workspace/opencv-master \
 
 ADD trt_sdk /workspace
 WORKDIR /workspace/trt_sdk
-
