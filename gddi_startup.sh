@@ -10,4 +10,3 @@ pip install scikit-learn \
     pycocotools
 
 cd $HOME
-

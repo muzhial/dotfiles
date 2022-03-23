@@ -1,6 +1,7 @@
 ## zsh
 # if [ $1 -eq 1 ]; then
 if command -v zsh > /dev/null 2>&1; then
+    sudo chsh -s /bin/zsh
     echo -e "\n===> exists zsh"
     echo "===> install oh-my-zsh"
     # sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
