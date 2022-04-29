@@ -14,6 +14,7 @@ RUN  apt-get update --allow-insecure-repositories && \
         libgl1-mesa-glx \
         zlib1g-dev \
         libjpeg-dev \
+        libglib2.0-0 \
         libpng-dev && \
     rm -rf /var/lib/apt/lists/*
 RUN /usr/sbin/update-ccache-symlinks
