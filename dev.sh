@@ -16,7 +16,7 @@ fi
 
 # common utils
 echo -e "\n===> apt install tools"
-sudo apt update
+sudo apt update --allow-insecure-repositories
 sudo apt install -y \
     wget curl tmux
 
@@ -53,7 +53,7 @@ if [[ ${install_list} =~ "neovim" ]]; then
     echo -e "\n===> install neovim"
     apt-get install software-properties-common
     add-apt-repository ppa:neovim-ppa/unstable
-    apt update
+    apt update --allow-insecure-repositories
     apt install neovim -y
 fi
 
