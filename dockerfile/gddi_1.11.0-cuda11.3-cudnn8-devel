@@ -1,0 +1,49 @@
+# FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-devel
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel
+
+ARG sudo=''
+
+## add user
+# ARG USERNAME=muzhi
+# ARG USER_UID=1000
+# ARG USER_GID=0
+
+# # RUN groupadd --gid $USER_GID $USERNAME \
+# RUN useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+#     && apt-get update \
+#     && apt-get install -y sudo wget \
+#     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+#     && chmod 0440 /etc/sudoers.d/$USERNAME
+#     # Clean up
+#     # && apt-get autoremove -y \
+#     # && apt-get clean -y \
+#     # && rm -rf /var/lib/apt/lists/*
+
+# USER $USERNAME
+
+# nvidia GPG error
+# RUN $sudo apt-key del 7fa2af80 \
+#     && wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
+#     && $sudo dpkg -i cuda-keyring_1.0-1_all.deb && rm cuda-keyring_1.0-1_all.deb \
+#     && $sudo rm /etc/apt/sources.list.d/cuda.list
+
+RUN $sudo rm /etc/apt/sources.list.d/cuda.list
+
+RUN $sudo apt update --allow-insecure-repositories \
+    && $sudo apt install -y \
+            git cmake curl wget \
+            openssh-server \
+            libgl1-mesa-glx \
+            sudo \
+            zlib1g-dev \
+            libncurses-dev \
+    && $sudo apt clean \
+    && $sudo rm -rf /var/lib/apt/lists/*
+
+
+## neovim
+RUN $sudo apt update \
+    && $sudo apt install -y software-properties-common \
+    && $sudo add-apt-repository ppa:neovim-ppa/unstable \
+    && $sudo apt update \
+    && $sudo apt install neovim -y

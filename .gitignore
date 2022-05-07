@@ -3,5 +3,5 @@
 
 *.deb
 # pytorch
-gddi*
+
 *.deb
