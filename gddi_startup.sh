@@ -1,6 +1,6 @@
 set -e
 
-echo "PATH=/opt/conda/bin:$PATH"
+echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
 
 sudo apt-key del 7fa2af80
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb
