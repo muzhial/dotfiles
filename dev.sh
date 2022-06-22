@@ -58,22 +58,17 @@ if [[ ${install_list} =~ "neovim" ]]; then
 fi
 
 
-#if [[ ${install_list} =~ "zsh" ]]; then
-    ## zsh
-    #if command -v zsh > /dev/null 2>&1; then
-    #    echo -e "\n===> exists zsh"
-    #    echo "===> install oh-my-zsh"
-    #    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    #else
-    #    echo -e "\n===> install zsh"
-    #    sudo apt install -y zsh
-    #    sudo chsh -s /bin/zsh
-    #    # theme: bira | murilasso | rgm
-    #    echo "===> install oh-my-zsh"
-    #    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    #fi
+# ---------
+# for gddi dev env
+# ---------
+if [[ ${install_list} =~ "gddi" ]]; then
+    echo -e "\n===> install gddi env"
+    # sudo apt-key del 7fa2af80
+    # wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb
+    # sudo dpkg -i cuda-keyring_1.0-1_all.deb && rm cuda-keyring_1.0-1_all.deb
+    # sudo rm /etc/apt/sources.list.d/cuda.list
 
-    #cp ~/.dotfiles/muzhi.zsh-theme ~/.oh-my-zsh/themes/
-    #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' ~/.zshrc
-#fi
+    echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+    source ~/.zshrc
+fi
 
