@@ -28,6 +28,19 @@ for repo in ${GIT_REPO_LIST[@]}; do
     fi
 done
 
+if [[ ${install_list} =~ "zsh" ]]; then
+
+    sudo apt install zsh -y
+    sudo chsh -s $(which zsh)
+
+    # Install On-My-Zsh
+    if [ ! -d $HOME/.oh-my-zsh ]; then
+        sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
+    fi
+
+    sudo usermod -s $(which zsh) $(whoami)
+fi
+
 
 if [[ ${install_list} =~ "pip" ]]; then
     echo -e "\n===> config pip source"
