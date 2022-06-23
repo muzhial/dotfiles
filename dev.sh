@@ -1,10 +1,10 @@
 set -e
 
 sudo='sudo'
-
 CURRENT_DIR=`pwd`
 GIT_REPO_LIST=(
     ~/.tmux
+    ~/.oh-my-zsh
 )
 
 default_list=()
@@ -22,12 +22,12 @@ $sudo apt install -y \
     wget curl tmux
 
 
-echo -e "\n===> rm thirdparty git repo first"
-for repo in ${GIT_REPO_LIST[@]}; do
-    if [ -d $repo ]; then
-        rm -rf $repo
-    fi
-done
+# echo -e "\n===> rm thirdparty git repo first"
+# for repo in ${GIT_REPO_LIST[@]}; do
+#     if [ -d $repo ]; then
+#         rm -rf $repo
+#     fi
+# done
 
 if [[ ${install_list} =~ "zsh" ]]; then
     $sudo apt install zsh -y
@@ -53,7 +53,6 @@ if [[ ${install_list} =~ "tmux" ]]; then
     echo -e "\n===> config tmux"
     ## oh my tmux config
     git clone https://github.com/gpakosz/.tmux.git ~/.tmux
-    cd $HOME
     ln -s -f .tmux/.tmux.conf
     cp ~/.dotfiles/.tmux.conf.local .
     ## config .tmux.cong.local set mouse mode
