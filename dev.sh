@@ -2,10 +2,6 @@ set -e
 
 sudo='sudo'
 CURRENT_DIR=`pwd`
-GIT_REPO_LIST=(
-    ~/.tmux
-    ~/.oh-my-zsh
-)
 
 default_list=()
 default_len=${#default_list[@]}
@@ -39,6 +35,8 @@ if [[ ${install_list} =~ "zsh" ]]; then
     fi
 
     $sudo usermod -s $(which zsh) $(whoami)
+    cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
 fi
 
 
@@ -51,8 +49,11 @@ fi
 
 if [[ ${install_list} =~ "tmux" ]]; then
     echo -e "\n===> config tmux"
+    if [ ! -d $HOME/.tmux ]; then
+        git clone https://github.com/gpakosz/.tmux.git ~/.tmux
+    fi
     ## oh my tmux config
-    git clone https://github.com/gpakosz/.tmux.git ~/.tmux
+    cd $HOME
     ln -s -f .tmux/.tmux.conf
     cp ~/.dotfiles/.tmux.conf.local .
     ## config .tmux.cong.local set mouse mode
