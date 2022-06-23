@@ -1,5 +1,6 @@
 set -e
-# TODO: git failed, retry specified times
+
+sudo='sudo'
 
 CURRENT_DIR=`pwd`
 GIT_REPO_LIST=(
@@ -15,9 +16,9 @@ else
 fi
 
 # common utils
-echo -e "\n===> apt install tools"
-sudo apt update --allow-insecure-repositories
-sudo apt install -y \
+echo -e "\n===> apt install ..."
+$sudo apt update --allow-insecure-repositories
+$sudo apt install -y \
     wget curl tmux
 
 
@@ -29,16 +30,15 @@ for repo in ${GIT_REPO_LIST[@]}; do
 done
 
 if [[ ${install_list} =~ "zsh" ]]; then
-
-    sudo apt install zsh -y
-    sudo chsh -s $(which zsh)
+    $sudo apt install zsh -y
+    $sudo chsh -s $(which zsh)
 
     # Install On-My-Zsh
     if [ ! -d $HOME/.oh-my-zsh ]; then
         sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
     fi
 
-    sudo usermod -s $(which zsh) $(whoami)
+    $sudo usermod -s $(which zsh) $(whoami)
 fi
 
 
@@ -64,10 +64,10 @@ fi
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
     echo -e "\n===> install neovim"
-    apt-get install software-properties-common
-    add-apt-repository ppa:neovim-ppa/unstable
-    apt update --allow-insecure-repositories
-    apt install neovim -y
+    $sudo apt-get install software-properties-common
+    $sudo add-apt-repository ppa:neovim-ppa/unstable
+    $sudo apt update --allow-insecure-repositories
+    $sudo apt install neovim -y
 fi
 
 
@@ -84,4 +84,3 @@ if [[ ${install_list} =~ "gddi" ]]; then
     echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
     source ~/.zshrc
 fi
-
