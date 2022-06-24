@@ -1,4 +1,4 @@
-set -e
+#set -e
 
 sudo='sudo'
 CURRENT_DIR=`pwd`
@@ -34,9 +34,9 @@ if [[ ${install_list} =~ "zsh" ]]; then
         sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
     fi
 
-    $sudo usermod -s $(which zsh) $(whoami)
     cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    $sudo usermod -s $(which zsh) $(whoami)
 fi
 
 
@@ -76,11 +76,14 @@ fi
 # ---------
 if [[ ${install_list} =~ "gddi" ]]; then
     echo -e "\n===> install gddi env"
-    # sudo apt-key del 7fa2af80
-    # wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb
-    # sudo dpkg -i cuda-keyring_1.0-1_all.deb && rm cuda-keyring_1.0-1_all.deb
     # sudo rm /etc/apt/sources.list.d/cuda.list
+    
+    cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    #$sudo usermod -s $(which zsh) $(whoami)
 
+    # gddi env
     echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+
     source ~/.zshrc
 fi
