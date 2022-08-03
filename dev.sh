@@ -72,14 +72,14 @@ fi
 
 
 # ---------
-# for gddi dev env
+# source dev env
 # ---------
-if [[ ${install_list} =~ "gddi" ]]; then
-    echo -e "\n===> install gddi env"
+if [[ ${install_list} =~ "start" ]]; then
+    echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
     
-    cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    #cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
+    #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
 
     # gddi env
