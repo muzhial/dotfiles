@@ -74,7 +74,7 @@ fi
 # ---------
 # source dev env
 # ---------
-if [[ ${install_list} =~ "start" ]]; then
+if [[ ${install_list} =~ "env" ]]; then
     echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
     
@@ -82,8 +82,16 @@ if [[ ${install_list} =~ "start" ]]; then
     #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
 
+    zshell=$(echo $SHELLS | grep "zsh")
+    bashell=$(echo $SHELLS | grep "bash")
     # gddi env
-    echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
-
-    source ~/.zshrc
+    if [[ $zshell != "" ]]; then
+        echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+	source ~/.zshrc
+    fi
+    if [[ $bashell != "" ]]; then
+        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
+        source ~/.bashrc
+    fi
 fi
+
