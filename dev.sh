@@ -82,14 +82,16 @@ if [[ ${install_list} =~ "env" ]]; then
     #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
 
-    zshell=$(echo $SHELLS | grep "zsh")
-    bashell=$(echo $SHELLS | grep "bash")
+    zshell=$(echo $SHELL | grep "zsh")
+    bashell=$(echo $SHELL | grep "bash")
     # gddi env
     if [[ $zshell != "" ]]; then
-        echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+        echo "in zsh"
+	echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
 	source ~/.zshrc
     fi
     if [[ $bashell != "" ]]; then
+	echo "in bash"
         echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
         source ~/.bashrc
     fi
