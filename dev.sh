@@ -49,9 +49,10 @@ fi
 
 if [[ ${install_list} =~ "tmux" ]]; then
     echo -e "\n===> config tmux"
-    if [ ! -d $HOME/.tmux ]; then
-        git clone https://github.com/gpakosz/.tmux.git ~/.tmux
-    fi
+    #if [ ! -d $HOME/.tmux ]; then
+        #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
+    #fi
+    cp -r ~/.dotfiles/.tmux ~/
     ## oh my tmux config
     cd $HOME
     ln -s -f .tmux/.tmux.conf
