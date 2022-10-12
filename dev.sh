@@ -15,7 +15,7 @@ fi
 echo -e "\n===> apt install ..."
 $sudo apt update --allow-insecure-repositories
 $sudo apt install -y \
-    wget curl tmux
+    wget curl tmux openssh-server
 
 
 # echo -e "\n===> rm thirdparty git repo first"
@@ -72,13 +72,26 @@ if [[ ${install_list} =~ "neovim" ]]; then
 fi
 
 
+if [[ ${install_list} =~ "ssh" ]]; then
+    # in docker container should start sshd service:
+    # `service ssh start`
+
+    # openssh-server
+    mkdir -p /var/run/sshd
+    # echo 'root:muzhi' | chpasswd
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+    echo "export VISIBLE=now" >> /etc/profile
+fi
+
+
 # ---------
 # source dev env
 # ---------
 if [[ ${install_list} =~ "env" ]]; then
     echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
-    
+
     #cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
     #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
@@ -97,4 +110,3 @@ if [[ ${install_list} =~ "env" ]]; then
         source ~/.bashrc
     fi
 fi
-
