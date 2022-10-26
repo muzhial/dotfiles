@@ -15,7 +15,8 @@ fi
 echo -e "\n===> apt install ..."
 $sudo apt update --allow-insecure-repositories
 $sudo apt install -y \
-    wget curl tmux openssh-server
+    wget curl tmux openssh-server \
+    htop zip unzip
 
 
 # echo -e "\n===> rm thirdparty git repo first"
