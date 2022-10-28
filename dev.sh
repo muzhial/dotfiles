@@ -86,6 +86,12 @@ if [[ ${install_list} =~ "ssh" ]]; then
 fi
 
 
+if [[ ${install_list} =~ "fzf" ]]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+fi
+
+
 # ---------
 # source dev env
 # ---------
