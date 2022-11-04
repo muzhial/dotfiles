@@ -1,7 +1,9 @@
 #set -e
 
 sudo='sudo'
-CURRENT_DIR=`pwd`
+_cwd_=`pwd`
+_file_=$(readlink -f "$0")
+_file_dir_=$(dirname "$_file_")
 
 default_list=()
 default_len=${#default_list[@]}
@@ -35,7 +37,7 @@ if [[ ${install_list} =~ "zsh" ]]; then
         sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
     fi
 
-    cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
+    cp $_file_dir_/mz.zsh-theme ~/.oh-my-zsh/themes/
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     $sudo usermod -s $(which zsh) $(whoami)
 fi
@@ -53,11 +55,11 @@ if [[ ${install_list} =~ "tmux" ]]; then
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     #fi
-    cp -r ~/.dotfiles/.tmux ~/
+    cp -r $_file_dir_/.tmux ~/
     ## oh my tmux config
     cd $HOME
     ln -s -f .tmux/.tmux.conf
-    cp ~/.dotfiles/.tmux.conf.local .
+    cp $_file_dir_/.tmux.conf.local .
     ## config .tmux.cong.local set mouse mode
     #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
 fi
@@ -88,7 +90,7 @@ fi
 
 if [[ ${install_list} =~ "fzf" ]]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install
+    yes | ~/.fzf/install
 fi
 
 
