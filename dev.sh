@@ -13,6 +13,31 @@ else
     install_list="$@"
 fi
 
+
+# ----- function -----
+check_shell() {
+    zshell=$(echo $SHELL | grep "zsh")
+    bashell=$(echo $SHELL | grep "bash")
+    if [[ $zshell != "" ]]; then
+	return 0
+    fi
+    if [[ $bashell != "" ]]; then
+	return 1
+    fi
+}
+
+
+is_cmd() {
+    if ! command -v $1 &> /dev/null
+    then
+        echo "$1 could not be found"
+        return 1
+    else
+        return 0
+    fi
+}
+
+
 # common utils
 echo -e "\n===> apt install ..."
 $sudo apt update --allow-insecure-repositories
@@ -101,21 +126,26 @@ if [[ ${install_list} =~ "env" ]]; then
     echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
 
-    #cp ~/.dotfiles/mz.zsh-theme ~/.oh-my-zsh/themes/
-    #sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    cp $_file_dir_/mz.zsh-theme ~/.oh-my-zsh/themes/
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    source ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
 
-    zshell=$(echo $SHELL | grep "zsh")
-    bashell=$(echo $SHELL | grep "bash")
     # gddi env
-    if [[ $zshell != "" ]]; then
+    if check_shell; then
         echo "in zsh"
-	echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
-	source ~/.zshrc
-    fi
-    if [[ $bashell != "" ]]; then
+	if ! $(is_cmd conda)
+	then
+	    echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+	    source ~/.zshrc
+	fi
+    else
 	echo "in bash"
-        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
-        source ~/.bashrc
+	if ! $(is_cmd conda)
+	then
+	    echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
+            source ~/.bashrc
+	fi
     fi
 fi
+
