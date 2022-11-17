@@ -41,6 +41,7 @@ RUN $sudo apt update --allow-insecure-repositories \
     libncurses-dev \
     zip unzip \
     libpng-dev libjpeg-dev \
+    zsh \
     && $sudo apt clean \
     && $sudo rm -rf /var/lib/apt/lists/*
 
@@ -63,6 +64,13 @@ ENV PATH /opt/conda/bin:$PATH
 #ENV PYTORCH_VERSION ${PYTORCH_VERSION}
 
 ARG PYTHON_VERSION=3.8
+
+
+# zsh
+RUN chsh -s $(which zsh) \
+    && usermod -s $(which zsh) $(whoami) \
+    && sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
+
 
 #COPY miniconda.sh /root
 RUN \

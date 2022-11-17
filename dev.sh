@@ -62,7 +62,7 @@ if [[ ${install_list} =~ "zsh" ]]; then
         sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
     fi
 
-    cp $_file_dir_/mz.zsh-theme ~/.oh-my-zsh/themes/
+    cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     $sudo usermod -s $(which zsh) $(whoami)
 fi
@@ -80,11 +80,11 @@ if [[ ${install_list} =~ "tmux" ]]; then
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     #fi
-    cp -r $_file_dir_/.tmux ~/
+    cp -r $_cwd_/.tmux ~/
     ## oh my tmux config
     cd $HOME
     ln -s -f .tmux/.tmux.conf
-    cp $_file_dir_/.tmux.conf.local .
+    cp $_cwd_/.tmux.conf.local .
     ## config .tmux.cong.local set mouse mode
     #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
 fi
@@ -126,7 +126,7 @@ if [[ ${install_list} =~ "env" ]]; then
     echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
 
-    cp $_file_dir_/mz.zsh-theme ~/.oh-my-zsh/themes/
+    cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
     source ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
