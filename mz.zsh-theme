@@ -4,10 +4,10 @@
 autoload -Uz vcs_info
 autoload -U colors && colors
 
-# enable only git 
-zstyle ':vcs_info:*' enable git 
+# enable only git
+zstyle ':vcs_info:*' enable git
 
-# setup a hook that runs before every ptompt. 
+# setup a hook that runs before every ptompt.
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
@@ -15,7 +15,7 @@ setopt prompt_subst
 # add a function to check for untracked files in the directory.
 # from https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-# 
+#
 +vi-git-untracked(){
     if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
         git status --porcelain | grep '??' &> /dev/null ; then
@@ -30,6 +30,10 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 zstyle ':vcs_info:*' check-for-changes true
 # zstyle ':vcs_info:git:*' formats " %r/%S %b %m%u%c "
 zstyle ':vcs_info:git:*' formats " %{$fg[blue]%}(%{$fg[red]%}%m%u%c%{$fg[yellow]%}%{$fg[magenta]%} %b%{$fg[blue]%})"
+
+# LS_COLORS='no=00;37:fi=00:di=00;33:ln=04;36:pi=40;33:so=01;35:bd=40;33;01:'
+# export LS_COLORS
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # format our main prompt for hostname current folder, and permissions.
 PROMPT="%B%{$fg[blue]%}[%{$fg[cyan]%}%n%{$fg[red]%}@%{$fg[cyan]%}%m%{$fg[blue]%}] %(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )%{$fg[cyan]%}%c%{$reset_color%}"
