@@ -128,26 +128,27 @@ if [[ ${install_list} =~ "env" ]]; then
     echo -e "\n===> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
 
-    cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
-    source ~/.zshrc
     #$sudo usermod -s $(which zsh) $(whoami)
 
     # gddi env
     if check_shell; then
         echo "in zsh"
-	if ! $(is_cmd conda)
-	then
-	    echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
-	    source ~/.zshrc
-	fi
+        cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
+        sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+        source ~/.zshrc
+ 
+	    if ! $(is_cmd conda)
+	    then
+	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
+	        source ~/.zshrc
+	    fi
     else
-	echo "in bash"
-	if ! $(is_cmd conda)
-	then
-	    echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
+	    echo "in bash"
+	    if ! $(is_cmd conda)
+	    then
+	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
             source ~/.bashrc
-	fi
+	    fi
     fi
 fi
 
