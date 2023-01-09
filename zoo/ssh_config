@@ -1,0 +1,4 @@
+Host gdd
+    HostName 10.11.0.126
+    User gdd
+    Port 22
