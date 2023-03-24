@@ -39,11 +39,16 @@ is_cmd() {
 
 
 # common utils
-echo -e "\n===> apt install ..."
+echo -e "\n-> apt install ..."
 $sudo apt update --allow-insecure-repositories
 $sudo apt install -y \
-    wget curl tmux openssh-server \
-    htop zip unzip
+    wget \
+    curl \
+    tmux \
+    openssh-server \
+    htop \
+    zip \
+    unzip
 
 
 # echo -e "\n===> rm thirdparty git repo first"
@@ -69,14 +74,14 @@ fi
 
 
 if [[ ${install_list} =~ "pip" ]]; then
-    echo -e "\n===> config pip source"
+    echo -e "\n-> config pip source"
     mkdir -p ~/.pip
     cp pip.conf ~/.pip
 fi
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
-    echo -e "\n===> config tmux"
+    echo -e "\n-> config tmux"
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     #fi
@@ -92,7 +97,7 @@ fi
 
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
-    echo -e "\n===> install neovim"
+    echo -e "\n-> install neovim"
     $sudo apt-get install software-properties-common
     $sudo add-apt-repository ppa:neovim-ppa/unstable
     $sudo apt update --allow-insecure-repositories
@@ -104,7 +109,7 @@ if [[ ${install_list} =~ "ssh" ]]; then
     # in docker container should start sshd service:
     # `service ssh start`
 
-    cp $_cwd_/zoo/ssh_config ~/.ssh/config 
+    cp $_cwd_/zoo/ssh_config ~/.ssh/config
 
     # openssh-server
     #mkdir -p /var/run/sshd
@@ -125,25 +130,25 @@ fi
 # source dev env
 # ---------
 if [[ ${install_list} =~ "env" ]]; then
-    echo -e "\n===> source env"
+    echo -e "\n-> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
 
     #$sudo usermod -s $(which zsh) $(whoami)
 
     # gddi env
     if check_shell; then
-        echo "in zsh"
+        echo -e "\n-> in zsh"
         cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
         sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
         source ~/.zshrc
- 
+
 	    if ! $(is_cmd conda)
 	    then
 	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
 	        source ~/.zshrc
 	    fi
     else
-	    echo "in bash"
+	    echo -e "\n-> in bash"
 	    if ! $(is_cmd conda)
 	    then
 	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
@@ -151,4 +156,3 @@ if [[ ${install_list} =~ "env" ]]; then
 	    fi
     fi
 fi
-

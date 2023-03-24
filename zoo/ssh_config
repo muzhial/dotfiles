@@ -1,4 +1,4 @@
 Host gdd
-    HostName 10.11.0.126
+    HostName 10.11.0.39
     User gdd
     Port 22
