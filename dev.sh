@@ -121,6 +121,9 @@ fi
 
 
 if [[ ${install_list} =~ "fzf" ]]; then
+    if [ -d ~/.fzf ]; then
+        rm -rf ~/.fzf
+    fi
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     yes | ~/.fzf/install
 fi
@@ -149,6 +152,8 @@ if [[ ${install_list} =~ "env" ]]; then
 	    fi
     else
 	    echo -e "\n-> in bash"
+        source ~/.bashrc
+
 	    if ! $(is_cmd conda)
 	    then
 	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
