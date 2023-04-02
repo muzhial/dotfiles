@@ -39,7 +39,7 @@ is_cmd() {
 
 
 # common utils
-echo -e "\n-> apt install ..."
+echo -e "-> apt install ..."
 $sudo apt update --allow-insecure-repositories
 $sudo apt install -y \
     wget \
@@ -74,14 +74,14 @@ fi
 
 
 if [[ ${install_list} =~ "pip" ]]; then
-    echo -e "\n-> config pip source"
+    echo -e "-> config pip source"
     mkdir -p ~/.pip
     cp pip.conf ~/.pip
 fi
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
-    echo -e "\n-> config tmux"
+    echo -e "-> config tmux"
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     #fi
@@ -97,7 +97,7 @@ fi
 
 if [[ ${install_list} =~ "neovim" ]]; then
     ## neovim
-    echo -e "\n-> install neovim"
+    echo -e "-> install neovim"
     $sudo apt-get install software-properties-common
     $sudo add-apt-repository ppa:neovim-ppa/unstable
     $sudo apt update --allow-insecure-repositories
@@ -133,14 +133,14 @@ fi
 # source dev env
 # ---------
 if [[ ${install_list} =~ "env" ]]; then
-    echo -e "\n-> source env"
+    echo -e "-> source env"
     # sudo rm /etc/apt/sources.list.d/cuda.list
 
     #$sudo usermod -s $(which zsh) $(whoami)
 
     # gddi env
     if check_shell; then
-        echo -e "\n-> in zsh"
+        echo -e "-> in zsh"
         cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
         sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
         source ~/.zshrc
@@ -151,7 +151,7 @@ if [[ ${install_list} =~ "env" ]]; then
 	        source ~/.zshrc
 	    fi
     else
-	    echo -e "\n-> in bash"
+	    echo -e "-> in bash"
         source ~/.bashrc
 
 	    if ! $(is_cmd conda)
