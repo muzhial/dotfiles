@@ -106,6 +106,7 @@ fi
 
 
 if [[ ${install_list} =~ "ssh" ]]; then
+    echo -e "-> config ssh"
     # in docker container should start sshd service:
     # `service ssh start`
 
@@ -117,15 +118,6 @@ if [[ ${install_list} =~ "ssh" ]]; then
     #sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
     #sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
     #echo "export VISIBLE=now" >> /etc/profile
-fi
-
-
-if [[ ${install_list} =~ "fzf" ]]; then
-    if [ -d ~/.fzf ]; then
-        rm -rf ~/.fzf
-    fi
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    yes | ~/.fzf/install
 fi
 
 
@@ -160,4 +152,14 @@ if [[ ${install_list} =~ "env" ]]; then
             source ~/.bashrc
 	    fi
     fi
+fi
+
+
+if [[ ${install_list} =~ "fzf" ]]; then
+    echo -e "-> install fzf"
+    if [ -d ~/.fzf ]; then
+        rm -rf ~/.fzf
+    fi
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    yes | ~/.fzf/install
 fi
