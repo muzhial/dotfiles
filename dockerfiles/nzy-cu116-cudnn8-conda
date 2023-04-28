@@ -1,12 +1,12 @@
-
-#ARG TORCH="1.11.0"
-#ARG CUDA="11.3"
-#ARG CUDNN="8"
+ARG TORCH="1.11.0"
+ARG CUDA="11.6.0"
+ARG CUDNN="8"
 #FROM pytorch/pytorch:${TORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
-FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:${CUDA}-cudnn${CUDNN}-devel-ubuntu20.04
 
 ARG sudo=''
+
 
 ## add user
 # ARG USERNAME=muzhi
@@ -24,6 +24,7 @@ ARG sudo=''
 #     # && rm -rf /var/lib/apt/lists/*
 
 # USER $USERNAME
+
 
 ENV DEBIAN_FRONTEND=noninteractive
 # RUN DEBIAN_FRONTEND=noninteractive apt install -y tzdata
@@ -49,13 +50,13 @@ RUN $sudo apt update --allow-insecure-repositories \
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys  A4B469963BF863CC
 
 ## neovim
-#RUN $sudo apt update \
-#    && $sudo apt install -y software-properties-common \
-#    && $sudo add-apt-repository ppa:neovim-ppa/unstable \
-#    && $sudo apt update \
-#    && $sudo apt install neovim -y \
-#    && $sudo apt clean \
-#    && $sudo rm -rf /var/lib/apt/lists/*
+RUN $sudo apt update \
+   && $sudo apt install -y software-properties-common \
+   && $sudo add-apt-repository ppa:neovim-ppa/unstable \
+   && $sudo apt update \
+   && $sudo apt install neovim -y \
+   && $sudo apt clean \
+   && $sudo rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
 #ENV NVIDIA_VISIBLE_DEVICES all
@@ -63,7 +64,7 @@ ENV PATH /opt/conda/bin:$PATH
 #ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 #ENV PYTORCH_VERSION ${PYTORCH_VERSION}
 
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.9
 
 
 # zsh
@@ -83,26 +84,11 @@ RUN \
                                     numpy ipython && \
 
     #/opt/conda/bin/python -mpip install -r requirements.txt && \
-    /opt/conda/bin/conda install pytorch==1.11.0 torchvision==0.12.0 \
-                                 torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch && \
+    # /opt/conda/bin/conda install pytorch==1.11.0 torchvision==0.12.0 \
+    #                              torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch && \
+
+    /opt/conda/bin/conda install pytorch==1.13.0 torchvision==0.14.0 \
+                                 torchaudio==0.13.0 pytorch-cuda=11.6 -c pytorch -c nvidia && \
+
     pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple && \
     /opt/conda/bin/conda clean -ya
-
-#COPY environment.yml .
-#RUN /opt/conda/bin/conda env create -f environment.yml && \
-#    conda init bash
-#
-
-ARG ENV_NAME=torch1.7
-
-RUN conda create -n ${ENV_NAME} python=${PYTHON_VERSION} && \
-    conda init bash && \
-    . ~/.bashrc && \
-    conda activate ${ENV_NAME} && \
-    conda install pytorch==1.7.0 \
-                  torchvision==0.8.1 torchaudio==0.7.0 cudatoolkit=11.0 -c pytorch && \
-    pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple && \
-    conda clean -ya
-
-RUN conda init bash
-
