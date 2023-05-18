@@ -110,13 +110,13 @@ if [[ ${install_list} =~ "ssh" ]]; then
     # in docker container should start sshd service:
     # `service ssh start`
 
-    cp $_cwd_/zoo/ssh_config ~/.ssh/config
+    # cp $_cwd_/zoo/ssh_config ~/.ssh/config
 
-    # openssh-server
-    #mkdir -p /var/run/sshd
-    ## echo 'root:muzhi' | chpasswd
-    #sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-    #sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+    # openssh-server settings
+    mkdir -p /var/run/sshd
+    echo 'root:' | chpasswd
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
     #echo "export VISIBLE=now" >> /etc/profile
 fi
 
