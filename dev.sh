@@ -1,3 +1,4 @@
+#!/bin/bash
 #set -e
 
 sudo='sudo'
@@ -5,13 +6,52 @@ _cwd_=`pwd`
 _file_=$(readlink -f "$0")
 _file_dir_=$(dirname "$_file_")
 
-default_list=()
-default_len=${#default_list[@]}
-if [ ${default_len} -gt 0 ]; then
-    install_list=${default_list}
-else
-    install_list="$@"
-fi
+#default_list=()
+#default_len=${#default_list[@]}
+#if [ ${default_len} -gt 0 ]; then
+#    install_list=${default_list}
+#else
+#    install_list="$@"
+#fi
+
+# cmd args
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -e|--extension)
+      EXTENSION="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -s|--searchpath)
+      SEARCHPATH="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    --default)
+      DEFAULT=YES
+      shift # past argument
+      ;;
+    --sshd_pw)
+      SSHD_PW="$2"
+      shift
+      shift
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+install_list=${POSITIONAL_ARGS[@]}
 
 
 # ----- function -----
@@ -114,7 +154,7 @@ if [[ ${install_list} =~ "ssh" ]]; then
 
     # openssh-server settings
     mkdir -p /var/run/sshd
-    echo 'root:' | chpasswd
+    echo "root:$SSHD_PW" | chpasswd
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
     #echo "export VISIBLE=now" >> /etc/profile
