@@ -1,0 +1,95 @@
+# FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-devel
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel
+
+ARG sudo=''
+
+## add user
+# ARG USERNAME=muzhi
+# ARG USER_UID=1000
+# ARG USER_GID=0
+
+# # RUN groupadd --gid $USER_GID $USERNAME \
+# RUN useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+#     && apt-get update \
+#     && apt-get install -y sudo wget \
+#     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+#     && chmod 0440 /etc/sudoers.d/$USERNAME
+#     # Clean up
+#     # && apt-get autoremove -y \
+#     # && apt-get clean -y \
+#     # && rm -rf /var/lib/apt/lists/*
+
+# USER $USERNAME
+
+
+RUN $sudo apt update \
+    && $sudo apt install -y \
+            git cmake curl wget \
+            ninja-build \
+            openssh-server \
+            libgl1-mesa-glx \
+            sudo \
+            zlib1g-dev \
+            libncurses-dev \
+            clang-10 \
+            libclang-10-dev \
+            silversearcher-ag \
+            ctags \
+            tmux \
+            zsh \
+    && $sudo ln -s /usr/bin/clang-10 /usr/bin/clang \
+    && $sudo apt clean \
+    && $sudo rm -rf /var/lib/apt/lists/*
+
+
+## neovim
+RUN $sudo apt update \
+    && $sudo apt install -y software-properties-common \
+    && $sudo add-apt-repository ppa:neovim-ppa/unstable \
+    && $sudo apt update \
+    && $sudo apt install neovim -y
+
+
+## ccls
+RUN git clone --depth=1 --recursive https://github.com/MaskRay/ccls $HOME/ccls \
+    && cd $HOME/ccls \
+    && cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10/lib/clang/10.0.0 \
+        -DLLVM_INCLUDE_DIR=/usr/lib/llvm-10/include \
+        -DLLVM_BUILD_INCLUDE_DIR=/usr/include/llvm-10/ \
+    && cmake --build Release \
+    && cd Release && $sudo make install \
+    && rm -rf ${work_path}/ccls
+
+
+## nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | $sudo bash - \
+    && $sudo apt install -y nodejs
+
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf \
+    && bash $HOME/.fzf/install
+
+
+## my dotfiles
+RUN git clone https://github.com/muzhial/dotfiles.git $HOME/.dotfiles
+## tmux
+RUN git clone https://github.com/gpakosz/.tmux.git $HOME/.tmux \
+    && ln -s $HOME/.tmux/.tmux.conf $HOME/.tmux.conf \
+    && cp $HOME/.dotfiles/.tmux.conf.local $HOME
+## zsh
+# Install On-My-Zsh
+COPY install.sh /tmp
+# RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended \
+RUN sh /tmp/install.sh --unattended \
+    && cp $HOME/.dotfiles/muzhi.zsh-theme $HOME/.oh-my-zsh/themes/ \
+    && sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="muzhi"/' $HOME/.zshrc \
+    && echo "PATH=/opt/conda/bin:$PATH" >> $HOME/.zshrc
+
+RUN pip install pynvim neovim
+
+
+ENV SHELL=/bin/zsh
+ENTRYPOINT [ "/bin/zsh" ]
+CMD ["-l"]
+
+# WORKDIR $HOME
