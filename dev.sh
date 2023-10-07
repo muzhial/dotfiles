@@ -1,7 +1,11 @@
 #!/bin/bash
 #set -e
 
-sudo='sudo'
+# ////////////////
+# ./dev.sh --sshd_pw <pw> tmux ...
+# ////////////////
+
+# sudo='sudo'
 _cwd_=`pwd`
 _file_=$(readlink -f "$0")
 _file_dir_=$(dirname "$_file_")
@@ -33,6 +37,10 @@ while [[ $# -gt 0 ]]; do
       DEFAULT=YES
       shift # past argument
       ;;
+    --nosu)
+      NOSU=false
+      shift
+      ;;
     --sshd_pw)
       SSHD_PW="$2"
       shift
@@ -53,6 +61,12 @@ set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 install_list=${POSITIONAL_ARGS[@]}
 
+if [ "$NOSU" = true ]; then
+    sudo=''
+else
+    sudo='sudo'
+fi
+
 
 # ----- function -----
 check_shell() {
@@ -70,7 +84,7 @@ check_shell() {
 is_cmd() {
     if ! command -v $1 &> /dev/null
     then
-        echo "$1 could not be found"
+        # echo "$1 could not be found"
         return 1
     else
         return 0
@@ -84,8 +98,6 @@ $sudo apt update --allow-insecure-repositories
 $sudo apt install -y \
     wget \
     curl \
-    tmux \
-    openssh-server \
     htop \
     zip \
     unzip
@@ -121,6 +133,7 @@ fi
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
+    $sudo apt install tmux -y
     echo -e "-> config tmux"
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
@@ -146,6 +159,7 @@ fi
 
 
 if [[ ${install_list} =~ "ssh" ]]; then
+    $sudo apt install openssh-server -y
     echo -e "-> config ssh"
     # in docker container should start sshd service:
     # `service ssh start`
