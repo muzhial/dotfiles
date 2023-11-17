@@ -1,9 +1,10 @@
 #!/bin/bash
 #set -e
 
-# ////////////////
+
+# Usage:
 # ./dev.sh --sshd_pw <pw> tmux ...
-# ////////////////
+
 
 # sudo='sudo'
 _cwd_=`pwd`
@@ -70,13 +71,15 @@ fi
 
 # ----- function -----
 check_shell() {
-    zshell=$(echo $SHELL | grep "zsh")
-    bashell=$(echo $SHELL | grep "bash")
+    # zshell=$(echo $SHELL | grep "zsh")
+    # bashell=$(echo $SHELL | grep "bash")
+    zshell=$(echo $0 | grep "zsh")
+    bashell=$(echo $0 | grep "bash")
     if [[ $zshell != "" ]]; then
-	return 0
+	    return 0
     fi
     if [[ $bashell != "" ]]; then
-	return 1
+	    return 1
     fi
 }
 
@@ -112,7 +115,9 @@ $sudo apt install -y \
 
 if [[ ${install_list} =~ "zsh" ]]; then
     $sudo apt install zsh -y
-    $sudo chsh -s $(which zsh)
+    # TODO: not working, the SHELL not changed
+    # $sudo chsh -s $(which zsh)
+    # $sudo usermod -s $(which zsh) $(whoami)
 
     # Install On-My-Zsh
     if [ ! -d $HOME/.oh-my-zsh ]; then
@@ -121,7 +126,6 @@ if [[ ${install_list} =~ "zsh" ]]; then
 
     cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
-    $sudo usermod -s $(which zsh) $(whoami)
 fi
 
 
@@ -187,9 +191,10 @@ if [[ ${install_list} =~ "env" ]]; then
     # gddi env
     if check_shell; then
         echo -e "-> in zsh"
-        cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
-        sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
-        source ~/.zshrc
+        # config my zsh
+        # cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
+        # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+        # source ~/.zshrc
 
 	    if ! $(is_cmd conda)
 	    then
