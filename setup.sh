@@ -7,9 +7,9 @@
 
 
 # sudo='sudo'
-_cwd_=`pwd`
-_file_=$(readlink -f "$0")
-_file_dir_=$(dirname "$_file_")
+CWD=`pwd`
+FILE_PATH=$(readlink -f "$0")
+ROOT_DIR=$(dirname "$FILE_PATH")
 
 #default_list=()
 #default_len=${#default_list[@]}
@@ -71,8 +71,6 @@ fi
 
 # ----- function -----
 check_shell() {
-    # zshell=$(echo $SHELL | grep "zsh")
-    # bashell=$(echo $SHELL | grep "bash")
     zshell=$(echo $0 | grep "zsh")
     bashell=$(echo $0 | grep "bash")
     if [[ $zshell != "" ]]; then
@@ -85,36 +83,37 @@ check_shell() {
 
 
 is_cmd() {
-    if ! command -v $1 &> /dev/null
-    then
-        # echo "$1 could not be found"
-        return 1
+    if command -v "$1" >/dev/null 2>&1; then
+        # echo "$1 is installed."
+        return 0  # true
     else
-        return 0
+        # echo "$1 is not installed."
+        return 1  # true
     fi
 }
 
 
+check_and_install() {
+    local flag_update=false
+    for arg in "$@"; do
+        echo "-> install $arg"
+        if ! is_cmd $arg; then
+            if [ "$flag_update" = false ]; then
+                $sudo apt update --allow-insecure-repositories
+                flag_update=true
+            fi
+            $sudo apt install -y $arg
+        fi
+    done
+}
+
+
 # common utils
-echo -e "-> apt install ..."
-$sudo apt update --allow-insecure-repositories
-$sudo apt install -y \
-    wget \
-    curl \
-    htop \
-    zip \
-    unzip
+check_and_install wget curl htop zip unzip zsh tmux
 
-
-# echo -e "\n===> rm thirdparty git repo first"
-# for repo in ${GIT_REPO_LIST[@]}; do
-#     if [ -d $repo ]; then
-#         rm -rf $repo
-#     fi
-# done
 
 if [[ ${install_list} =~ "zsh" ]]; then
-    $sudo apt install zsh -y
+    # $sudo apt install zsh -y
     # TODO: not working, the SHELL not changed
     # $sudo chsh -s $(which zsh)
     # $sudo usermod -s $(which zsh) $(whoami)
@@ -124,29 +123,30 @@ if [[ ${install_list} =~ "zsh" ]]; then
         sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
     fi
 
-    cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
+    cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
 fi
 
 
 if [[ ${install_list} =~ "pip" ]]; then
     echo -e "-> config pip source"
-    mkdir -p ~/.pip
-    cp pip.conf ~/.pip
+    mkdir -p $HOME/.pip
+    cp $ROOT_DIR/zoo/pip.conf $HOME/.pip
 fi
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
-    $sudo apt install tmux -y
+    # $sudo apt install tmux -y
     echo -e "-> config tmux"
     #if [ ! -d $HOME/.tmux ]; then
         #git clone https://github.com/gpakosz/.tmux.git ~/.tmux
     #fi
-    cp -r $_cwd_/.tmux ~/
+    cp -r $ROOT_DIR/.tmux $HOME
     ## oh my tmux config
     cd $HOME
     ln -s -f .tmux/.tmux.conf
-    cp $_cwd_/.tmux.conf.local .
+    cp $ROOT_DIR/zoo/.tmux.conf.local .
+    cd $CWD
     ## config .tmux.cong.local set mouse mode
     #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
 fi
@@ -196,19 +196,17 @@ if [[ ${install_list} =~ "env" ]]; then
         # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
         # source ~/.zshrc
 
-	    if ! $(is_cmd conda)
-	    then
-	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.zshrc
-	        source ~/.zshrc
+	    if is_cmd conda; then
+	        echo "PATH=/opt/conda/bin:$PATH" >> $HOME/.zshrc
+	        source $HOME/.zshrc
 	    fi
     else
 	    echo -e "-> in bash"
-        source ~/.bashrc
+        source $HOME/.bashrc
 
-	    if ! $(is_cmd conda)
-	    then
-	        echo "PATH=/opt/conda/bin:$PATH" >> ~/.bashrc
-            source ~/.bashrc
+	    if is_cmd conda; then
+	        echo "PATH=/opt/conda/bin:$PATH" >> $HOME/.bashrc
+            source $HOME/.bashrc
 	    fi
     fi
 fi
@@ -216,9 +214,9 @@ fi
 
 if [[ ${install_list} =~ "fzf" ]]; then
     echo -e "-> install fzf"
-    if [ -d ~/.fzf ]; then
-        rm -rf ~/.fzf
+    if [ -d $HOME/.fzf ]; then
+        rm -rf $HOME/.fzf
     fi
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    yes | ~/.fzf/install
+    yes | $HOME/.fzf/install
 fi
