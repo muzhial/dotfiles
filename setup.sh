@@ -3,7 +3,7 @@
 
 
 # Usage:
-# ./dev.sh --sshd_pw <pw> tmux ...
+# ./dev.sh --ssh_pw <pw> tmux ...
 
 
 # sudo='sudo'
@@ -39,10 +39,10 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       ;;
     --nosu)
-      NOSU=false
+      NOSU=true
       shift
       ;;
-    --sshd_pw)
+    --ssh_pw)
       SSHD_PW="$2"
       shift
       shift
@@ -88,7 +88,7 @@ is_cmd() {
         return 0  # true
     else
         # echo "$1 is not installed."
-        return 1  # true
+        return 1  # false
     fi
 }
 
