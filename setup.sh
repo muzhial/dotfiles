@@ -3,7 +3,7 @@
 
 
 # Usage:
-# ./dev.sh --ssh_pw <pw> tmux ...
+# ./dev.sh --ssh_pw <pw> ssh tmux ...
 
 
 # sudo='sudo'
@@ -120,11 +120,14 @@ if [[ ${install_list} =~ "zsh" ]]; then
 
     # Install On-My-Zsh
     if [ ! -d $HOME/.oh-my-zsh ]; then
-        sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
+        (sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)")
     fi
 
-    cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
+    curl -sS https://starship.rs/install.sh | sh
+    echo 'eval "$(starship init zsh)"' >> $HOME/.zshrc
+
+    # cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
+    # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
 fi
 
 
@@ -217,6 +220,6 @@ if [[ ${install_list} =~ "fzf" ]]; then
     if [ -d $HOME/.fzf ]; then
         rm -rf $HOME/.fzf
     fi
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
     yes | $HOME/.fzf/install
 fi
