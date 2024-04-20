@@ -49,4 +49,4 @@ RUN python3 -m venv /opt/venv;
 ENV PATH="/opt/venv/bin:$PATH"
 
 # pytorch
-RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
