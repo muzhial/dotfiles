@@ -45,8 +45,8 @@ RUN apt update --allow-insecure-repositories && \
 	apt clean && \
     rm -rf /var/lib/apt/lists/*
 # create and activate virtual environment
-RUN python3 -m venv /opt/venv;
-ENV PATH="/opt/venv/bin:$PATH"
+RUN python3 -m venv /root/.venv
+ENV PATH="/root/.venv/bin:$PATH"
 
 # pytorch
 RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
