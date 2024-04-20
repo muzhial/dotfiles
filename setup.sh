@@ -123,11 +123,18 @@ if [[ ${install_list} =~ "zsh" ]]; then
         (sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)")
     fi
 
-    curl -sS https://starship.rs/install.sh | sh
-    echo 'eval "$(starship init zsh)"' >> $HOME/.zshrc
-
     # cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
     # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
+fi
+
+
+if [[ ${install_list} =~ "starship" ]]; then
+    curl -sS https://starship.rs/install.sh | sh
+    if check_shell; then
+        echo 'eval "$(starship init zsh)"' >> $HOME/.zshrc
+    else
+        echo 'eval "$(starship init bash)"' >> $HOME/.bashrc
+    fi
 fi
 
 
