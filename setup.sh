@@ -23,44 +23,47 @@ ROOT_DIR=$(dirname "$FILE_PATH")
 POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -e|--extension)
-      EXTENSION="$2"
-      shift # past argument
-      shift # past value
-      ;;
-    -s|--searchpath)
-      SEARCHPATH="$2"
-      shift # past argument
-      shift # past value
-      ;;
-    --default)
-      DEFAULT=YES
-      shift # past argument
-      ;;
-    --nosu)
-      NOSU=true
-      shift
-      ;;
-    --ssh_pw)
-      SSHD_PW="$2"
-      shift
-      shift
-      ;;
-    -*|--*)
-      echo "Unknown option $1"
-      exit 1
-      ;;
-    *)
-      POSITIONAL_ARGS+=("$1") # save positional arg
-      shift # past argument
-      ;;
-  esac
+    case $1 in
+        -e|--extension)
+            EXTENSION="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        --default)
+            DEFAULT=YES
+            shift # past argument
+            ;;
+        --nosu)
+            NOSU=true; shift;;
+        --ssh_pw)
+            SSHD_PW="$2"
+            shift
+            shift
+            ;;
+        -h|--help)
+            HELP=1
+            shift
+            ;;
+        -*|--*)
+            echo "Unknown option $1"
+            exit 1
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1") # save positional arg
+            shift # past argument
+            ;;
+    esac
 done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 install_list=${POSITIONAL_ARGS[@]}
+
+if [ "$HELP" -eq "1" ]; then
+    echo "Usage: $0 [--ssh_pw your-pw] [ssh] [tmux] [pip] ..."
+    echo "  --help or -h          : Print this help menu."
+    exit;
+fi
 
 if [ "$NOSU" = true ]; then
     sudo=''
