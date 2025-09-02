@@ -1,3 +1,3 @@
 ## dotfiles
 
-My Linux Configuration Files.
+My Configuration Files.

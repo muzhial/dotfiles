@@ -1,10 +1,5 @@
 #!/bin/bash
-#set -e
-
-
-# Usage:
-# ./dev.sh --ssh_pw <pw> ssh tmux ...
-
+set -e
 
 # sudo='sudo'
 CWD=`pwd`
@@ -33,8 +28,8 @@ while [[ $# -gt 0 ]]; do
             DEFAULT=YES
             shift # past argument
             ;;
-        --nosu)
-            NOSU=true; shift;;
+        --su)
+            SU=true; shift;;
         --ssh_pw)
             SSHD_PW="$2"
             shift
@@ -60,15 +55,15 @@ set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 install_list=${POSITIONAL_ARGS[@]}
 
 if [ "$HELP" -eq "1" ]; then
-    echo "Usage: $0 [--ssh_pw your-pw] [ssh] [tmux] [pip] ..."
+    echo "Usage: $0 [--ssh_pw your-pw ssh] [tmux] [zsh] [fzf]"
     echo "  --help or -h          : Print this help menu."
     exit;
 fi
 
-if [ "$NOSU" = true ]; then
-    sudo=''
-else
+if [ "$SU" = true ]; then
     sudo='sudo'
+else
+    sudo=''
 fi
 
 
@@ -115,39 +110,6 @@ check_and_install() {
 check_and_install wget curl htop zip unzip zsh tmux
 
 
-if [[ ${install_list} =~ "zsh" ]]; then
-    # $sudo apt install zsh -y
-    # TODO: not working, the SHELL not changed
-    # $sudo chsh -s $(which zsh)
-    # $sudo usermod -s $(which zsh) $(whoami)
-
-    # Install On-My-Zsh
-    if [ ! -d $HOME/.oh-my-zsh ]; then
-        (sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)")
-    fi
-
-    # cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
-    # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
-fi
-
-
-if [[ ${install_list} =~ "starship" ]]; then
-    curl -sS https://starship.rs/install.sh | sh
-    if check_shell; then
-        echo 'eval "$(starship init zsh)"' >> $HOME/.zshrc
-    else
-        echo 'eval "$(starship init bash)"' >> $HOME/.bashrc
-    fi
-fi
-
-
-if [[ ${install_list} =~ "pip" ]]; then
-    echo -e "-> config pip source"
-    mkdir -p $HOME/.pip
-    cp $ROOT_DIR/zoo/pip.conf $HOME/.pip
-fi
-
-
 if [[ ${install_list} =~ "tmux" ]]; then
     # $sudo apt install tmux -y
     echo -e "-> config tmux"
@@ -162,16 +124,6 @@ if [[ ${install_list} =~ "tmux" ]]; then
     cd $CWD
     ## config .tmux.cong.local set mouse mode
     #sed -i 's/#set -g mouse on/set -g mouse on/' .tmux.conf.local
-fi
-
-
-if [[ ${install_list} =~ "neovim" ]]; then
-    ## neovim
-    echo -e "-> install neovim"
-    $sudo apt-get install software-properties-common
-    $sudo add-apt-repository ppa:neovim-ppa/unstable
-    $sudo apt update --allow-insecure-repositories
-    $sudo apt install neovim -y
 fi
 
 
@@ -192,36 +144,48 @@ if [[ ${install_list} =~ "ssh" ]]; then
 fi
 
 
-# ---------
-# source dev env
-# ---------
-if [[ ${install_list} =~ "env" ]]; then
-    echo -e "-> source env"
-    # sudo rm /etc/apt/sources.list.d/cuda.list
+# config zsh / oh-my-zsh
+if [[ ${install_list} =~ "zsh" ]]; then
+    # $sudo apt install zsh -y
 
-    #$sudo usermod -s $(which zsh) $(whoami)
-
-    # gddi env
-    if check_shell; then
-        echo -e "-> in zsh"
-        # config my zsh
-        # cp $_cwd_/mz.zsh-theme ~/.oh-my-zsh/themes/
-        # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' ~/.zshrc
-        # source ~/.zshrc
-
-	    if is_cmd conda; then
-	        echo "PATH=/opt/conda/bin:$PATH" >> $HOME/.zshrc
-	        source $HOME/.zshrc
-	    fi
+    # Set zsh as default shell
+    echo "-> setting zsh as default shell"
+    if [ "$SU" = true ]; then
+        $sudo usermod -s $(which zsh) $(whoami)
     else
-	    echo -e "-> in bash"
-        source $HOME/.bashrc
-
-	    if is_cmd conda; then
-	        echo "PATH=/opt/conda/bin:$PATH" >> $HOME/.bashrc
-            source $HOME/.bashrc
-	    fi
+        chsh -s $(which zsh)
     fi
+
+    echo "[INFO] Default shell changed to zsh. You may need to log out and log back in for the change to take effect."
+
+    # Add fallback to automatically start zsh from bash
+    echo "-> adding zsh fallback to .bashrc"
+    if ! grep -q "exec zsh" "$HOME/.bashrc" 2>/dev/null; then
+        echo "" >> "$HOME/.bashrc"
+        echo "# Auto-start zsh if available and not already in zsh" >> "$HOME/.bashrc"
+        echo 'if [ -x "$(command -v zsh)" ] && [ "$0" != "-zsh" ] && [ -z "$ZSH_VERSION" ]; then' >> "$HOME/.bashrc"
+        echo '    exec zsh' >> "$HOME/.bashrc"
+        echo 'fi' >> "$HOME/.bashrc"
+    fi
+
+    # Install On-My-Zsh (unattended installation to avoid interrupting script)
+    echo "-> installing oh-my-zsh"
+    if [ ! -d $HOME/.oh-my-zsh ]; then
+        RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    fi
+
+    # cp $ROOT_DIR/zoo/mz.zsh-theme $HOME/.oh-my-zsh/themes/
+    # sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="mz"/' $HOME/.zshrc
+
+    echo "-> config pure theme in zsh"
+    mkdir -p "$HOME/.zsh"
+    git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+
+    # Add pure prompt configuration to .zshrc
+    echo "# --- pure theme ---" >> "$HOME/.zshrc"
+    echo "fpath+=(\$HOME/.zsh/pure)" >> "$HOME/.zshrc"
+    echo "autoload -U promptinit; promptinit" >> "$HOME/.zshrc"
+    echo "prompt pure" >> "$HOME/.zshrc"
 fi
 
 
