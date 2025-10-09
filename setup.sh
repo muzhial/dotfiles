@@ -1,18 +1,9 @@
 #!/bin/bash
 set -e
 
-# sudo='sudo'
 CWD=`pwd`
 FILE_PATH=$(readlink -f "$0")
 ROOT_DIR=$(dirname "$FILE_PATH")
-
-#default_list=()
-#default_len=${#default_list[@]}
-#if [ ${default_len} -gt 0 ]; then
-#    install_list=${default_list}
-#else
-#    install_list="$@"
-#fi
 
 # cmd args
 POSITIONAL_ARGS=()
@@ -107,7 +98,7 @@ check_and_install() {
 
 
 # common utils
-check_and_install wget curl htop zip unzip zsh tmux
+check_and_install wget curl htop zip unzip zsh tmux neovim
 
 
 if [[ ${install_list} =~ "tmux" ]]; then
