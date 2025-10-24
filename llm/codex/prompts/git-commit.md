@@ -9,16 +9,14 @@
 
 ```
 <type>(<scope>): <short summary>
-
 <body>
-
 <footer>
 ```
 
 - **type**: what kind of change (feat, fix, refactor, etc.)
 - **scope (optional)**: the module/part of code affected
 - **summary**: one-line change description (imperative mood, e.g. "add", "fix", not "added", "fixed")
-- **body (optional)**: explain what & why, not how. Bullet points or short sentences are fine (1–5 items is typical)
+- **body (optional)**: explain what & why, not how. Use bullet points without blank lines between items (1–5 items is typical)
 - **footer (optional)**: references (issue IDs, breaking changes, etc.)
 
 Common Types (Conventional Commits):
