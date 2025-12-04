@@ -1,0 +1,8 @@
+.DS_Store
+.nfs*
+
+*.deb
+# pytorch
+
+*.deb
+.claude
