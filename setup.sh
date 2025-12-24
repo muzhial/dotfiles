@@ -310,6 +310,21 @@ config_claude_code() {
     cp -R "$src" "$dest"
 }
 
+config_cursor() {
+    local src="$ROOT_DIR/.llm/cursor/rules/."
+    local dest_dir="$HOME/.cursor"
+    local dest="$dest_dir/rules"
+
+    if [ ! -d "$src" ]; then
+        echo "[WARN] cursor rules directory not found at $src"
+        return
+    fi
+
+    echo "-> config cursor rules"
+    mkdir -p "$dest"
+    cp -R "$src" "$dest"
+}
+
 command_install() {
     local args=("$@")
     local base_packages=(wget curl htop zip unzip)
@@ -358,6 +373,14 @@ command_config() {
                 ;;
             cc|claude|claude_code)
                 config_claude_code
+                ;;
+            cursor)
+                config_cursor
+                ;;
+            all)
+                config_codex
+                config_claude_code
+                config_cursor
                 ;;
             *)
                 echo "[WARN] Unknown config target: $target"

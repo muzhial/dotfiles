@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+globs:
+description:
+---
+
+# Core Rules
+
+1. Always think, reason, and write code in English.
+2. Use clear, precise, and concise technical English for:
+   - Code comments
+   - Documentation
+   - Commit messages
+   - Explanations and refactors
+
+3. Minimize the use of emoji:
+   - Avoid emoji by default in technical discussions, code, and docs.
+   - Only use emoji when explicitly requested by the user or when they clearly improve readability.
+   - Never let emoji replace precise technical wording.
+
+4. Favor readability and maintainability:
+   - Prefer explicit, self-explanatory names for variables, functions, and classes.
+   - Add brief comments where intent might not be obvious from the code alone.
+   - Keep responses and code focused on the user’s request without unnecessary decoration.
+
+5. When in doubt:
+   - Default to plain English.
+   - Default to no emoji.
