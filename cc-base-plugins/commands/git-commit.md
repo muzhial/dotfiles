@@ -1,3 +1,8 @@
+---
+description: Generates clear commit messages from git diffs. Then create a git commit.
+allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
+---
+
 ## Instructions
 
 1. Run `git status` and `git diff HEAD` to inspect all changes.

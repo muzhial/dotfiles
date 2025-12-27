@@ -1,0 +1,9 @@
+{
+  "name": "cc-base-plugins",
+  "version": "0.1.0",
+  "description": "A collection of base Claude Code plugins",
+  "author": {
+    "name": "muzhial"
+  },
+  "repository": "https://github.com/muzhial/dotfiles.git"
+}
