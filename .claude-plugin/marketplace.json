@@ -1,0 +1,18 @@
+{
+    "name": "muzhial-plugins",
+    "owner": {
+        "name": "muzhial",
+        "email": "zhimu1226@gmail.com"
+    },
+    "metadata": {
+        "description": "my plugins",
+        "version": "0.1.0"
+    },
+    "plugins": [
+        {
+            "name": "cc-base-plugins",
+            "source": "./cc-base-plugins",
+            "description": "A collection of base Claude Code plugins"
+        }
+    ]
+}
