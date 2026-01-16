@@ -20,25 +20,21 @@
 # new window retains current path, possible values are:
 #   - true
 #   - false (default)
-#   - disabled (do not modify new-window bindings)
 tmux_conf_new_window_retain_current_path=false
 
 # new pane retains current path, possible values are:
 #   - true (default)
 #   - false
-#   - disabled (do not modify split-window bindings)
 tmux_conf_new_pane_retain_current_path=true
 
-# new pane tries to reconnect ssh sessions, possible values are:
+# new pane tries to reconnect ssh sessions (experimental), possible values are:
 #   - true
 #   - false (default)
-#   - disabled (do not modify split-window bindings)
 tmux_conf_new_pane_reconnect_ssh=false
 
 # prompt for session name when creating a new session, possible values are:
 #   - true
 #   - false (default)
-#   - disabled (do not modify new-session bindings)
 tmux_conf_new_session_prompt=false
 
 
@@ -46,13 +42,8 @@ tmux_conf_new_session_prompt=false
 
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
-#  - false
-#  - auto (default)
-#
-# automatic detection relies on the COLORTERM environment variable being defined
-# to 'truecolor' or '24bit' or '$ tput colors' answering '16777216'
-# see https://github.com/termstandard/colors
-tmux_conf_24b_colour=auto
+#  - false (default)
+tmux_conf_24b_colour=false
 
 # default theme
 tmux_conf_theme_colour_1="#080808"    # dark gray
@@ -72,6 +63,19 @@ tmux_conf_theme_colour_14="#080808"   # dark gray
 tmux_conf_theme_colour_15="#080808"   # dark gray
 tmux_conf_theme_colour_16="#d70000"   # red
 tmux_conf_theme_colour_17="#e4e4e4"   # white
+
+# Dracula Color
+white='#f8f8f2'        # Foreground
+gray='#44475a'         # Current Line / Selection
+dark_gray='#282a36'    # Background
+light_purple='#bd93f9' # Purple
+dark_purple='#6272a4'  # Comment
+cyan='#8be9fd'         # Cyan
+green='#50fa7b'        # Green
+orange='#ffb86c'       # Orange
+red='#ff5555'          # Red
+pink='#ff79c6'         # Pink
+yellow='#f1fa8c'       # Yellow
 
 # default theme (ansi)
 #tmux_conf_theme_colour_1="colour0"
@@ -118,8 +122,8 @@ tmux_conf_theme_pane_indicator="$tmux_conf_theme_colour_4"
 tmux_conf_theme_pane_active_indicator="$tmux_conf_theme_colour_4"
 
 # status line style
-tmux_conf_theme_message_fg="$tmux_conf_theme_colour_1"
-tmux_conf_theme_message_bg="$tmux_conf_theme_colour_5"
+tmux_conf_theme_message_fg="$gray"
+tmux_conf_theme_message_bg="$green"
 tmux_conf_theme_message_attr="bold"
 
 # status line command style (<prefix> : Escape)
@@ -235,18 +239,54 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+tmux_conf_theme_status_left=" ❐ #S "
+tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}, #{username}#{root} , #{hostname} "
 
 # status left style
-tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
-tmux_conf_theme_status_left_bg="$tmux_conf_theme_colour_9,$tmux_conf_theme_colour_10,$tmux_conf_theme_colour_11"
+tmux_conf_theme_status_left_fg="$dark_gray,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
+tmux_conf_theme_status_left_bg="$green,$tmux_conf_theme_colour_10,$tmux_conf_theme_colour_11"
 tmux_conf_theme_status_left_attr="bold,none,none"
 
 # status right style
 tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_12,$tmux_conf_theme_colour_13,$tmux_conf_theme_colour_14"
 tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_15,$tmux_conf_theme_colour_16,$tmux_conf_theme_colour_17"
 tmux_conf_theme_status_right_attr="none,none,bold"
+
+
+################ borrowed from:
+## https://github.com/Junnplus/dotfiles/blob/master/tmux-status.conf
+#set-option -g status-style "bg=$dark_purple"
+
+# Status setup
+#set -g status on
+#set -g status-fg default
+#set -g status-bg $gray
+#set -g status-justify left
+#set -g status-interval 1
+
+#separator="#[fg=$gray]|#[default]"
+
+# set -g status-left-length 80
+# Options -> ⧉ ❐
+#set -g status-left "#{?client_prefix,#[fg=$dark_gray bg=$green],#[bold fg=#22252B bg=$light_purple]} ❐ #S "
+# set -g status-right-length 70
+# set -g status-right "#{pane_current_path} #[bg=$dark_purple] %a %b %d #[fg=$dark_gray,bold]%H:%M "
+#set -g status-right "#{pane_current_path}"
+
+#set-window-option -g window-status-current-style "fg=$dark_purple bg=$white"
+#set-window-option -g window-status-current-format "#[bold,italics] #I: #W #F "
+
+# for some unknown reason this tmux section is being set to reverse from
+# somewhere so we explictly remove it here
+#set-window-option -g window-status-style "fg=$dark_gray dim"
+#set-window-option -g window-status-format "#[none] #I: #{=20:window_name} "
+#set-window-option -g window-status-separator "$separator"
+
+# Set window notifications
+#set-option -g monitor-activity on
+#set-option -g visual-activity off
+################
+
 
 # pairing indicator
 tmux_conf_theme_pairing="⚇"                 # U+2687
@@ -327,9 +367,8 @@ tmux_conf_theme_clock_style="24"
 # in copy mode, copying selection also copies to the OS clipboard
 #   - true
 #   - false (default)
-#   - disabled
 # on macOS, this requires installing reattach-to-user-namespace, see README.md
-# on Linux, this requires xsel, xclip or wl-copy
+# on Linux, this requires xsel or xclip
 tmux_conf_copy_to_os_clipboard=false
 
 
@@ -340,7 +379,7 @@ tmux_conf_copy_to_os_clipboard=false
 #set -g history-limit 10000
 
 # start with mouse mode enabled
-#set -g mouse on
+set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -348,14 +387,11 @@ tmux_conf_copy_to_os_clipboard=false
 #set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
-# unbind C-b
-# set -g prefix C-a
-# bind C-a send-prefix
-
-# if you don't want Oh my tmux! to alter a binding, use #!important
-# bind v new-window -c #{pane_current_path} #!important
+set -gu prefix2
+unbind C-a
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
 
 # move status line to top
 #set -g status-position top
@@ -418,9 +454,9 @@ tmux_conf_uninstall_plugins_on_reload=true
 #
 # # /!\ do not "uncomment" the functions: the leading "# " characters are needed
 #
-# weather() {                                         # see https://github.com/chubin/wttr.in#one-line-output
-#   curl -f -s -m 2 'wttr.in?format=3' || printf '\n' # /!\ make sure curl is installed
-#   sleep 900                                         # sleep for 15 minutes, throttle network requests whatever the value of status-interval
+# weather() {
+#   curl -m 1 wttr.in?format=3 2>/dev/null
+#   sleep 900 # sleep for 15 minutes, throttle network requests whatever the value of status-interval
 # }
 #
 # online() {

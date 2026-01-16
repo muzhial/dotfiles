@@ -1,5 +1,5 @@
 {
-    "name": "muzhial-plugins",
+    "name": "mz-plugins",
     "owner": {
         "name": "muzhial",
         "email": "zhimu1226@gmail.com"
@@ -10,8 +10,8 @@
     },
     "plugins": [
         {
-            "name": "cc-base-plugins",
-            "source": "./cc-base-plugins",
+            "name": "mz-plugins",
+            "source": "./mz-plugins",
             "description": "A collection of base Claude Code plugins"
         }
     ]

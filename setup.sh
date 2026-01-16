@@ -176,7 +176,7 @@ config_tmux() {
         ln -s -f .tmux/.tmux.conf
     )
 
-    local tmux_local_src="$ROOT_DIR/zoo/.tmux.conf.local"
+    local tmux_local_src="$HOME/.tmux/.tmux.conf.local"
     if [ -f "$tmux_local_src" ]; then
         cp "$tmux_local_src" "$HOME/.tmux.conf.local"
     fi
